@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PC Parts & Electronics Store</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f3d4;
+            color: #333;
+        }
+
+        header {
+            background-color: #f1c40f; /* Yellow */
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #f39c12; /* Darker Yellow */
+            padding: 10px 0;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 20px;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            width: 280px;
+            margin: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: scale(1.05);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 15px;
+        }
+
+        .product-info h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .product-info p {
+            font-size: 1.2em;
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+        .product-info .price {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #f39c12; /* Yellow */
+        }
+
+        .product-info button {
+            width: 100%;
+            padding: 10px;
+            background-color: #f39c12; /* Yellow */
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+
+        .product-info button:hover {
+            background-color: #e67e22; /* Darker Yellow */
+        }
+
+        .cart {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #f39c12; /* Yellow */
+            color: white;
+            padding: 10px 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5em;
+        }
+
+        .cart-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            border-radius: 8px;
+        }
+
+        .cart-popup .cart-item {
+            margin-bottom: 10px;
+        }
+
+        .cart-popup .cart-item p {
+            margin: 5px 0;
+        }
+
+        .cart-popup .cart-item .quantity {
+            display: inline-block;
+            width: 20px;
+            text-align: center;
+        }
+
+        .cart-popup .cart-item .total {
+            font-weight: bold;
+        }
+
+        .cart-popup button {
+            width: 100%;
+            padding: 10px;
+            background-color: #f39c12; /* Yellow */
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .cart-popup button:hover {
+            background-color: #e67e22; /* Darker Yellow */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>PC Parts & Electronics Store</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Shop</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="product-card" id="product1">
+            <img src="https://via.placeholder.com/280x200" alt="Product 1">
+            <div class="product-info">
+                <h3>Graphics Card</h3>
+                <p>High-performance graphics card for gaming</p>
+                <div class="price">$299.99</div>
+                <button onclick="addToCart('Graphics Card', 299.99)">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="product-card" id="product2">
+            <img src="https://via.placeholder.com/280x200" alt="Product 2">
+            <div class="product-info">
+                <h3>SSD Storage</h3>
+                <p>Fast SSD storage for your PC build</p>
+                <div class="price">$99.99</div>
+                <button onclick="addToCart('SSD Storage', 99.99)">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="product-card" id="product3">
+            <img src="https://via.placeholder.com/280x200" alt="Product 3">
+            <div class="product-info">
+                <h3>RGB RAM</h3>
+                <p>Stylish and fast RAM for your build</p>
+                <div class="price">$79.99</div>
+                <button onclick="addToCart('RGB RAM', 79.99)">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="cart" onclick="toggleCartPopup()">🛒</div>
+
+    <div class="cart-popup" id="cartPopup">
+        <h3>Your Cart</h3>
+        <div id="cartItems"></div>
+        <div id="cartTotal">
+            <strong>Total: $0.00</strong>
+        </div>
+        <button onclick="checkout()">Checkout</button>
+    </div>
+
+    <script>
+        let cart = [];
+
+        function addToCart(productName, productPrice) {
+            const existingProduct = cart.find(item => item.name === productName);
+            if (existingProduct) {
+                existingProduct.quantity++;
+            } else {
+                cart.push({ name: productName, price: productPrice, quantity: 1 });
+            }
+            updateCart();
+        }
+
+        function updateCart() {
+            const cartItemsDiv = document.getElementById('cartItems');
+            const cartTotalDiv = document.getElementById('cartTotal');
+            cartItemsDiv.innerHTML = '';
+            let total = 0;
+
+            cart.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.classList.add('cart-item');
+                itemDiv.innerHTML = `
+                    <p>${item.name} - $${item.price} x <span class="quantity">${item.quantity}</span></p>
+                    <div class="total">$${(item.price * item.quantity).toFixed(2)}</div>
+                `;
+                cartItemsDiv.appendChild(itemDiv);
+                total += item.price * item.quantity;
+            });
+
+            cartTotalDiv.innerHTML = `<strong>Total: $${total.toFixed(2)}</strong>`;
+        }
+
+        function toggleCartPopup() {
+            const cartPopup = document.getElementById('cartPopup');
+            cartPopup.style.display = cartPopup.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function checkout() {
+            alert('Proceeding to checkout...');
+            cart = [];
+            updateCart();
+            toggleCartPopup();
+        }
+    </script>
+</body>
+</html>
